@@ -17,7 +17,7 @@ export const Container = styled.SafeAreaView`
 
 export const PacientContainer = styled.View`
   border-radius: 10px;
-  margin-top: 40px;
+  margin-top: 32px;
   flex: 1;
   flex-direction: row;
 `;
@@ -40,8 +40,9 @@ export const Pacient = styled(RectButton)`
 `;
 
 export const PacientName = styled.Text`
-  font-size: 18px;
-  line-height: 24px;
+  font-family: 'Poppins-Regular';
+  font-size: 16px;
+  line-height: 20px;
   color: #000;
   margin-bottom: 24px;
 `;
@@ -61,11 +62,13 @@ export const Icon = styled(FeatherIcon)`
 `;
 
 export const PacientPhone = styled.Text`
+  font-family: 'Poppins-Regular';
   font-size: 14px;
   color: #000;
 `;
 
 export const PacientCPF = styled.Text`
+  font-family: 'Poppins-Regular';
   font-size: 14px;
   margin-top: 8px;
   color: #000;

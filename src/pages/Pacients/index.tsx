@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Container,
@@ -24,6 +25,12 @@ interface Pacient {
 const Pacients: React.FC = () => {
   const [pacients, setPacients] = useState<Pacient[]>([]);
 
+  const navigation = useNavigation();
+
+  async function handleNavigate(id: string): Promise<void> {
+    navigation.navigate('PacientsInfo', { id });
+  }
+
   useEffect(() => {
     async function loadPacients(): Promise<void> {
       const response = await api.get('/all-pacients');
@@ -41,7 +48,7 @@ const Pacients: React.FC = () => {
           data={pacients}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <Pacient>
+            <Pacient onPress={() => handleNavigate(item.id)}>
               <PacientName>{item.name}</PacientName>
               <PacientInfo>
                 <PacientLine>

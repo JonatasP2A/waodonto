@@ -19,6 +19,7 @@ const AppRoutes: React.FC = () => (
         labelStyle: {
           fontSize: 12,
           fontWeight: '600',
+          fontFamily: 'Poppins-Medium',
         },
       }}
     >

@@ -35,6 +35,7 @@
     "no-await-in-loop": "off",
     "no-unused-expressions": "off",
     "camelcase": "off",
+    "import/no-unresolved": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {

@@ -11,7 +11,15 @@ const AttendancesStackScreen: React.FC = () => (
     <App.Screen
       name="Agenda"
       component={Attendance}
-      options={() => ({ headerTitle: 'Agenda', headerTitleAlign: 'center' })}
+      options={() => ({
+        headerTitle: 'Agenda',
+        headerTitleAlign: 'center',
+        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: '#273554' },
+        headerTitleStyle: {
+          fontFamily: 'Poppins-Medium',
+        },
+      })}
     />
     <App.Screen
       name="Agendamento"
@@ -19,6 +27,11 @@ const AttendancesStackScreen: React.FC = () => (
       options={() => ({
         headerTitle: 'Agendamentos',
         headerTitleAlign: 'center',
+        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: '#273554' },
+        headerTitleStyle: {
+          fontFamily: 'Poppins-Medium',
+        },
       })}
     />
   </App.Navigator>
