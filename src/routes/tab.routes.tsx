@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import AttendancesStackScreen from './attendancesStack.routes';
 import PacientsStackScreen from './pacientsStack.routes';
-import Payments from '../pages/Payments';
+import PaymentsStackScreen from './paymentsStack.routes';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,7 +51,7 @@ const AppRoutes: React.FC = () => (
           title: 'Pagamentos',
         }}
         name="Pagamentos"
-        component={Payments}
+        component={PaymentsStackScreen}
       />
     </Tab.Navigator>
   </NavigationContainer>
