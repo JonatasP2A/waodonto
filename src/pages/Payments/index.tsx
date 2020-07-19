@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { BorderlessButton } from 'react-native-gesture-handler';
-import { getMonth, getYear } from 'date-fns';
+import { getMonth, getYear, format } from 'date-fns';
 
 import {
   Container,
@@ -10,14 +11,16 @@ import {
   Icon,
   BalanceTextMonth,
   BalanceTextBalance,
+  ScrollView,
   DetailsContainer,
   PacientContainer,
   PacientNameText,
   Row,
   PacientText,
+  AddButton,
+  AddIcon,
 } from './styles';
 
-import formatValue from '../../utils/formatValue';
 import api from '../../services/api';
 
 interface Payments {
@@ -37,6 +40,8 @@ const Payments: React.FC = () => {
   const [month, setMonth] = useState(getMonth(new Date()) + 1);
   const [year, setYear] = useState(getYear(new Date()));
   const [payments, setPayments] = useState<Payments[]>([]);
+
+  const navigation = useNavigation();
 
   const months = [
     'Janeiro',
@@ -93,7 +98,7 @@ const Payments: React.FC = () => {
       return accumulator;
     }, 0);
 
-    return formatValue(total);
+    return total;
   }, [payments]);
 
   return (
@@ -116,15 +121,36 @@ const Payments: React.FC = () => {
           </BorderlessButton>
         </BalanceMonth>
       </BalanceContainer>
-      <DetailsContainer>
-        <PacientContainer>
-          <PacientNameText>Jônatas Pereira de Alcântara Alves</PacientNameText>
-          <Row>
-            <PacientText>R$ 1000,00 | Cheque</PacientText>
-            <PacientText>03/07/2020</PacientText>
-          </Row>
-        </PacientContainer>
-      </DetailsContainer>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <DetailsContainer>
+          {payments.map(payment => (
+            <PacientContainer key={payment.id}>
+              <PacientNameText>{payment.pacient.name}</PacientNameText>
+              <Row>
+                <PacientText>
+                  {payment.amount} | {payment.form_payment}
+                </PacientText>
+                <PacientText>
+                  {format(new Date(payment.payment_day), 'dd/MM/yyyy')}
+                </PacientText>
+              </Row>
+              {payment.account && payment.agency && (
+                <Row>
+                  <PacientText>Ag: {payment.agency}</PacientText>
+                  <PacientText>Conta: {payment.account}</PacientText>
+                  <PacientText>Nº Cheque: 850653</PacientText>
+                </Row>
+              )}
+              {payment.name_cheque && (
+                <PacientText>Cheque de: {payment.name_cheque}</PacientText>
+              )}
+            </PacientContainer>
+          ))}
+        </DetailsContainer>
+      </ScrollView>
+      <AddButton onPress={() => navigation.navigate('RegisterPayment')}>
+        <AddIcon name="plus" size={24} />
+      </AddButton>
     </Container>
   );
 };

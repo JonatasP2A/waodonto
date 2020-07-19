@@ -1,7 +1,8 @@
 import styled from 'styled-components/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import { RectButton } from 'react-native-gesture-handler';
 
-export const Container = styled.View`
+export const Container = styled.SafeAreaView`
   flex: 1;
   margin: 20px 20px 0;
 `;
@@ -40,12 +41,14 @@ export const BalanceTextBalance = styled.Text`
   color: #000;
 `;
 
+export const ScrollView = styled.ScrollView`
+  margin-top: 20px;
+`;
+
 export const DetailsContainer = styled.View`
-  /* flex: 1; */
   width: 100%;
   border-radius: 20px;
   background: #627b9b;
-  margin-top: 16px;
   padding: 20px 20px;
 `;
 
@@ -59,7 +62,7 @@ export const PacientContainer = styled.View`
 export const PacientNameText = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 16px;
-  color: #fff;
+  color: #e2887f;
 `;
 
 export const Row = styled.View`
@@ -70,5 +73,23 @@ export const Row = styled.View`
 export const PacientText = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 14px;
+  color: #fff;
+`;
+
+export const AddButton = styled(RectButton)`
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  background: #e2887f;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 20px;
+`;
+
+export const AddIcon = styled(FeatherIcon)`
   color: #fff;
 `;
