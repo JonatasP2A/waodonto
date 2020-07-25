@@ -20,16 +20,17 @@ import {
   AddButton,
   AddIcon,
 } from './styles';
+import formatValue from '../../utils/formatValue';
 
 import api from '../../services/api';
 
 interface Payments {
   id: string;
   form_payment: string;
-  amount: string;
+  amount: number;
   payment_day: string;
-  agency?: string;
-  account?: string;
+  agency?: number;
+  account?: number;
   name_cheque?: string;
   pacient: {
     name: string;
@@ -98,7 +99,7 @@ const Payments: React.FC = () => {
       return accumulator;
     }, 0);
 
-    return total;
+    return formatValue(total);
   }, [payments]);
 
   return (
@@ -128,7 +129,7 @@ const Payments: React.FC = () => {
               <PacientNameText>{payment.pacient.name}</PacientNameText>
               <Row>
                 <PacientText>
-                  {payment.amount} | {payment.form_payment}
+                  {formatValue(Number(payment.amount))} | {payment.form_payment}
                 </PacientText>
                 <PacientText>
                   {format(new Date(payment.payment_day), 'dd/MM/yyyy')}

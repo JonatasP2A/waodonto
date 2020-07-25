@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
+import { FlatList, Dimensions } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
@@ -72,4 +72,22 @@ export const PacientCPF = styled.Text`
   font-size: 14px;
   margin-top: 8px;
   color: #000;
+`;
+
+export const AddButton = styled(RectButton)`
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  background: #627b9b;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  left: ${Dimensions.get('window').width - 70}px;
+  margin-bottom: 20px;
+`;
+
+export const AddIcon = styled(FeatherIcon)`
+  color: #fff;
 `;

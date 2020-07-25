@@ -12,13 +12,8 @@ const AttendancesStackScreen: React.FC = () => (
       name="Agenda"
       component={Attendance}
       options={() => ({
-        headerTitle: 'Agenda',
-        headerTitleAlign: 'center',
-        headerTintColor: '#fff',
+        headerTitle: '',
         headerStyle: { backgroundColor: '#273554' },
-        headerTitleStyle: {
-          fontFamily: 'Poppins-Medium',
-        },
       })}
     />
     <App.Screen
@@ -31,6 +26,7 @@ const AttendancesStackScreen: React.FC = () => (
         headerStyle: { backgroundColor: '#273554' },
         headerTitleStyle: {
           fontFamily: 'Poppins-Medium',
+          fontSize: 16,
         },
       })}
     />

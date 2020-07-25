@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback, useRef } from 'react';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import React, { useCallback, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
@@ -8,12 +8,6 @@ import Button from '../../components/Button';
 
 import { Container } from './styles';
 import { usePacient } from '../../hooks/pacients';
-
-import api from '../../services/api';
-
-interface Params {
-  id: string;
-}
 
 interface FormDataPacient {
   name: string;
@@ -27,31 +21,16 @@ interface FormDataPacient {
 
 const PacientsEdit: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const route = useRoute();
   const { goBack } = useNavigation();
-  const { editPacient } = usePacient();
-
-  const routeParams = route.params as Params;
-
-  const { id } = routeParams;
-
-  useEffect(() => {
-    async function loadPacient(): Promise<void> {
-      const response = await api.get(`/pacients/${id}`);
-
-      formRef.current?.setData(response.data);
-    }
-
-    loadPacient();
-  }, [id, routeParams]);
+  const { addPacient } = usePacient();
 
   const handleEdit = useCallback(
     async (data: FormDataPacient) => {
-      editPacient(id, data);
+      addPacient(data);
 
       goBack();
     },
-    [id, goBack, editPacient],
+    [goBack, addPacient],
   );
 
   return (
@@ -70,7 +49,7 @@ const PacientsEdit: React.FC = () => {
             formRef.current?.submitForm();
           }}
         >
-          Salvar Alterações
+          Cadastrar
         </Button>
       </Form>
     </Container>

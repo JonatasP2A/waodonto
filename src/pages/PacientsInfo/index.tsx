@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { BorderlessButton } from 'react-native-gesture-handler';
 
@@ -12,7 +12,7 @@ import {
   Text,
   Icon,
 } from './styles';
-import api from '../../services/api';
+import { usePacient } from '../../hooks/pacients';
 
 interface Params {
   id: string;
@@ -30,7 +30,7 @@ interface Pacient {
 }
 
 const PacientsInfo: React.FC = () => {
-  const [pacient, setPacient] = useState({} as Pacient);
+  const { pacients } = usePacient();
 
   const navigation = useNavigation();
 
@@ -41,53 +41,54 @@ const PacientsInfo: React.FC = () => {
   }
 
   const routeParams = route.params as Params;
+  const { id } = routeParams;
 
-  useEffect(() => {
-    async function loadPacient(): Promise<void> {
-      const { id } = routeParams;
-
-      const response = await api.get(`/pacients/${id}`);
-
-      setPacient(response.data);
-    }
-
-    loadPacient();
-  }, [routeParams]);
+  const pacient = pacients.find(p => p.id === id);
 
   return (
     <Container>
       <Header>
-        <PacientName>{pacient.name}</PacientName>
-        <BorderlessButton onPress={() => handleNavigate(pacient.id)}>
-          <IconEdit name="edit" size={24} />
-        </BorderlessButton>
+        <PacientName>{pacient && pacient.name}</PacientName>
+        {pacient && (
+          <BorderlessButton onPress={() => handleNavigate(pacient.id)}>
+            <IconEdit name="edit" size={24} />
+          </BorderlessButton>
+        )}
       </Header>
       <Body>
         <Information>
           <Icon name="smartphone" size={24} />
-          <Text>{pacient.phone ? pacient.phone : 'Não cadastrado'}</Text>
+          <Text>
+            {pacient && pacient.phone ? pacient.phone : 'Não cadastrado'}
+          </Text>
         </Information>
         <Information>
           <Icon name="user" size={24} />
-          <Text>{pacient.cpf ? pacient.cpf : 'Não cadastrado'}</Text>
+          <Text>{pacient && pacient.cpf ? pacient.cpf : 'Não cadastrado'}</Text>
         </Information>
         <Information>
           <Icon name="home" size={24} />
-          <Text>{pacient.address ? pacient.address : 'Não cadastrado'}</Text>
+          <Text>
+            {pacient && pacient.address ? pacient.address : 'Não cadastrado'}
+          </Text>
         </Information>
         <Information>
           <Icon name="briefcase" size={24} />
-          <Text>{pacient.job ? pacient.job : 'Não cadastrado'}</Text>
+          <Text>{pacient && pacient.job ? pacient.job : 'Não cadastrado'}</Text>
         </Information>
         <Information>
           <Icon name="instagram" size={24} />
           <Text>
-            {pacient.instagram ? pacient.instagram : 'Não cadastrado'}
+            {pacient && pacient.instagram
+              ? pacient.instagram
+              : 'Não cadastrado'}
           </Text>
         </Information>
         <Information>
           <Icon name="gift" size={24} />
-          <Text>{pacient.birthday ? pacient.birthday : 'Não cadastrado'}</Text>
+          <Text>
+            {pacient && pacient.birthday ? pacient.birthday : 'Não cadastrado'}
+          </Text>
         </Information>
       </Body>
     </Container>

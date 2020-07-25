@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -12,8 +12,11 @@ import {
   PacientPhone,
   PacientCPF,
   Icon,
+  AddButton,
+  AddIcon,
 } from './styles';
-import api from '../../services/api';
+
+import { usePacient } from '../../hooks/pacients';
 
 interface Pacient {
   id: string;
@@ -23,23 +26,13 @@ interface Pacient {
 }
 
 const Pacients: React.FC = () => {
-  const [pacients, setPacients] = useState<Pacient[]>([]);
+  const { pacients } = usePacient();
 
   const navigation = useNavigation();
 
   async function handleNavigate(id: string): Promise<void> {
     navigation.navigate('PacientsInfo', { id });
   }
-
-  useEffect(() => {
-    async function loadPacients(): Promise<void> {
-      const response = await api.get('/all-pacients');
-
-      setPacients(response.data);
-    }
-
-    loadPacients();
-  }, []);
 
   return (
     <Container>
@@ -64,6 +57,9 @@ const Pacients: React.FC = () => {
           )}
         />
       </PacientContainer>
+      <AddButton onPress={() => navigation.navigate('PacientsAdd')}>
+        <AddIcon name="plus" size={24} />
+      </AddButton>
     </Container>
   );
 };
