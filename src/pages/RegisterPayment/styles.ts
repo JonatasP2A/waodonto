@@ -8,24 +8,25 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const PacientsScroll = styled.ScrollView`
-  max-height: 78px;
+  max-height: 72px;
 `;
 
 export const PacientContainer = styled(RectButton)`
-  width: 168px;
-  height: 62px;
+  flex: 1;
+  flex-direction: row;
   background: #b7b7cc;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
+  padding: 0 8px;
   margin-right: 16px;
+  margin-bottom: 16px;
 `;
 
 export const PacientNameText = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 16px;
   color: #fff;
-  max-width: 150px;
 `;
 
 export const Text = styled.Text`

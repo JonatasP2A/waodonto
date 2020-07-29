@@ -17,7 +17,7 @@ const AttendancesStackScreen: React.FC = () => (
       })}
     />
     <App.Screen
-      name="Agendamento"
+      name="RegisterAttendance"
       component={RegisterAttendance}
       options={() => ({
         headerTitle: 'Agendamentos',
