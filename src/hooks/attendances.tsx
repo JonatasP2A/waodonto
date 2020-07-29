@@ -19,9 +19,9 @@ interface Attendance {
 }
 
 interface AttendanceContext {
-  attendance: Attendance[];
-  addAttendance(data: Omit<Attendance, 'id'>): void;
-  removeAttendance(id: string): void;
+  attendances: Attendance[];
+  addAttendance(data: Omit<Attendance, 'id'>): Promise<void>;
+  removeAttendance(id: string): Promise<void>;
   changeData(data: string): void;
 }
 
@@ -33,7 +33,7 @@ const AttendanceProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadPacients(): Promise<void> {
-      const response = await api.get('/attendances', { date });
+      const response = await api.post('/attendances', { date });
       setAttendances(response.data);
 
       await AsyncStorage.setItem(
