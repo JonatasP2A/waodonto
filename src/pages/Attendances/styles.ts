@@ -25,7 +25,7 @@ export const ApresentationText = styled.Text`
   color: #fff;
 `;
 
-export const AppointmentsContainer = styled.View`
+export const AppointmentsContainer = styled.ScrollView`
   flex: 1;
   background: #fff;
   border-top-right-radius: 25px;
@@ -42,7 +42,9 @@ export const Text = styled.Text`
 
 export const AttendanceContainer = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  /* max-width: 235px; */
 `;
 
 export const HourAttendanceContainer = styled.View`
@@ -53,6 +55,7 @@ export const StartHourAttendance = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 14px;
   color: #000;
+  width: 40px;
 `;
 
 export const EndHourAttendance = styled.Text`
@@ -63,14 +66,15 @@ export const EndHourAttendance = styled.Text`
 
 export const PacientBox = styled.View`
   flex: 1;
-  flex-direction: row;
   border-radius: 10px;
   background: #e5dbda;
   padding: 8px 16px;
-  justify-content: space-between;
 `;
 
-export const PacientContainer = styled.View``;
+export const PacientContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
 export const NameText = styled.Text`
   font-family: 'Poppins-Regular';

@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Dimensions, View, ScrollView, Alert } from 'react-native';
+import React, { useState, useCallback, useRef } from 'react';
+import { Dimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BaseButton } from 'react-native-gesture-handler';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
-import { parseJSON } from 'date-fns';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -70,12 +69,14 @@ const RegisterPayment: React.FC = () => {
 
   const handleCashPayment = useCallback(
     async (data: FormDataPacient) => {
+      const date = data.payment_day.split('/');
+
       if (pacientSelected) {
         await api.post('/payments/cash-debit', {
           pacient_id: pacientSelected.id,
           form_payment: payments_form[paymentForm % 5],
           amount: data.amount,
-          payment_day: new Date(),
+          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
         });
       }
 
@@ -86,12 +87,14 @@ const RegisterPayment: React.FC = () => {
 
   const handleChequePayment = useCallback(
     async (data: FormDataPacient) => {
+      const date = data.payment_day.split('/');
+
       if (pacientSelected) {
         await api.post('/payments/cheque', {
           pacient_id: pacientSelected.id,
           form_payment: payments_form[paymentForm % 5],
           amount: data.amount,
-          payment_day: new Date(),
+          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
           agency: data.agency,
           account: data.account,
           name_cheque: data.name_cheque,
@@ -105,12 +108,14 @@ const RegisterPayment: React.FC = () => {
 
   const handleCreditPayment = useCallback(
     async (data: FormDataPacient) => {
+      const date = data.payment_day.split('/');
+
       if (pacientSelected) {
         await api.post('/payments/credit', {
           pacient_id: pacientSelected.id,
           form_payment: payments_form[paymentForm % 5],
           amount: data.amount,
-          payment_day: new Date(),
+          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
           quota: data.quota,
         });
       }
