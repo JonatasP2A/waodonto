@@ -16,6 +16,9 @@ interface Attendance {
   start_hour: Date;
   end_hour: Date;
   treatment: string;
+  pacient: {
+    name: string;
+  };
 }
 
 interface AttendanceContext {
@@ -29,11 +32,11 @@ const AttendanceContext = createContext<AttendanceContext | null>(null);
 
 const AttendanceProvider: React.FC = ({ children }) => {
   const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [date, setDate] = useState(format(new Date(), 'YYYY-MM-dd'));
+  const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   useEffect(() => {
     async function loadPacients(): Promise<void> {
-      const response = await api.post('/attendances', { date });
+      const response = await api.get(`/attendances/${date}`);
       setAttendances(response.data);
 
       await AsyncStorage.setItem(

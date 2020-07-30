@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+// import { format } from 'date-fns';
+
+import { useAttendance } from '../../hooks/attendances';
 
 import {
   Container,
@@ -22,7 +25,7 @@ import {
 } from './styles';
 
 const Attendances: React.FC = () => {
-  const [day, setDay] = useState(new Date());
+  const { attendances } = useAttendance();
   const navigation = useNavigation();
 
   return (
@@ -38,27 +41,29 @@ const Attendances: React.FC = () => {
       </Apresentation>
       <AppointmentsContainer>
         <Text>Manhã:</Text>
-        <AttendanceContainer>
-          <Icon
-            name="clock"
-            size={20}
-            color="#E2887F"
-            style={{ marginRight: 8 }}
-          />
-          <HourAttendanceContainer>
-            <StartHourAttendance>08:00</StartHourAttendance>
-            <EndHourAttendance>08:30</EndHourAttendance>
-          </HourAttendanceContainer>
-          <PacientBox>
-            <PacientContainer>
-              <NameText>Jônatas Pereira de Alcântara Alves</NameText>
-              <DetailsText>Primeira consulta</DetailsText>
-            </PacientContainer>
-            <BaseButton>
-              <Icon name="trash-2" size={20} color="#C74646" />
-            </BaseButton>
-          </PacientBox>
-        </AttendanceContainer>
+        {attendances.map(attendance => (
+          <AttendanceContainer key={attendance.id}>
+            <Icon
+              name="clock"
+              size={20}
+              color="#E2887F"
+              style={{ marginRight: 8 }}
+            />
+            <HourAttendanceContainer>
+              <StartHourAttendance>{attendance.start_hour}</StartHourAttendance>
+              <EndHourAttendance>{attendance.end_hour}</EndHourAttendance>
+            </HourAttendanceContainer>
+            <PacientBox>
+              <PacientContainer>
+                <NameText>{attendance.pacient.name}</NameText>
+                <DetailsText>{attendance.treatment}</DetailsText>
+              </PacientContainer>
+              <BaseButton>
+                <Icon name="trash-2" size={20} color="#C74646" />
+              </BaseButton>
+            </PacientBox>
+          </AttendanceContainer>
+        ))}
         <Text style={{ marginTop: 8 }}>Tarde:</Text>
       </AppointmentsContainer>
       <AddButton
