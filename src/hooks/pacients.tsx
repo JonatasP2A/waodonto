@@ -24,7 +24,6 @@ interface PacientContext {
   pacients: Pacient[];
   addPacient(data: Omit<Pacient, 'id'>): void;
   editPacient(id: string, data: Omit<Pacient, 'id'>): void;
-  // decrement(id: string): void;
 }
 
 const PacientContext = createContext<PacientContext | null>(null);
@@ -91,30 +90,6 @@ const PacientProvider: React.FC = ({ children }) => {
     },
     [pacients],
   );
-
-  // const decrement = useCallback(
-  //   async id => {
-  //     const findProduct = products.findIndex(product => product.id === id);
-
-  //     if (products[findProduct].quantity === 1) {
-  //       setProducts(products.filter(product => product.id !== id));
-  //     } else {
-  //       setProducts(
-  //         products.map(product =>
-  //           product.id === id
-  //             ? { ...product, quantity: product.quantity - 1 }
-  //             : product,
-  //         ),
-  //       );
-  //     }
-
-  //     await AsyncStorage.setItem(
-  //       '@GoMarketplace:products',
-  //       JSON.stringify(products),
-  //     );
-  //   },
-  //   [products],
-  // );
 
   const value = React.useMemo(() => ({ addPacient, editPacient, pacients }), [
     pacients,

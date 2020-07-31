@@ -40,6 +40,7 @@ const Pacients: React.FC = () => {
         <PacientList
           data={pacients}
           keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <Pacient onPress={() => handleNavigate(item.id)}>
               <PacientName>{item.name}</PacientName>

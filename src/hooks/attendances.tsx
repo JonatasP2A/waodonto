@@ -13,17 +13,24 @@ import api from '../services/api';
 interface Attendance {
   id: string;
   pacient_id: string;
-  start_hour: Date;
-  end_hour: Date;
+  start_hour: string;
+  end_hour: string;
   treatment: string;
   pacient: {
     name: string;
   };
 }
 
+interface AddAttendance {
+  pacient_id: string;
+  start_hour: string;
+  end_hour: string;
+  treatment: string;
+}
+
 interface AttendanceContext {
   attendances: Attendance[];
-  addAttendance(data: Omit<Attendance, 'id'>): Promise<void>;
+  addAttendance(data: AddAttendance): Promise<void>;
   removeAttendance(id: string): Promise<void>;
   changeData(data: string): void;
 }
@@ -49,10 +56,14 @@ const AttendanceProvider: React.FC = ({ children }) => {
   }, [date]);
 
   const addAttendance = useCallback(
-    async (data: Omit<Attendance, 'id'>) => {
-      const response = await api.post('pacients', data);
+    async (data: AddAttendance) => {
+      const response = await api.post('/attendances', data);
+      const userName = await api.get(`/pacients/${response.data.pacient_id}`);
 
-      setAttendances([...attendances, response.data]);
+      setAttendances([
+        ...attendances,
+        { ...response.data, pacient: { name: userName.data.name } },
+      ]);
 
       await AsyncStorage.setItem(
         '@WaOdonto:attendances',

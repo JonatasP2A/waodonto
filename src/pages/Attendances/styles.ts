@@ -25,11 +25,14 @@ export const ApresentationText = styled.Text`
   color: #fff;
 `;
 
-export const AppointmentsContainer = styled.ScrollView`
+export const ScrollView = styled.ScrollView`
   flex: 1;
   background: #fff;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
+`;
+
+export const AppointmentsContainer = styled.View`
   padding: 32px 20px 16px;
 `;
 

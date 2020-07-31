@@ -14,6 +14,7 @@ import {
   ApresentationText,
   Icon,
   AppointmentsContainer,
+  ScrollView,
   AttendanceContainer,
   HourAttendanceContainer,
   StartHourAttendance,
@@ -26,7 +27,7 @@ import {
 } from './styles';
 
 const Attendances: React.FC = () => {
-  const { attendances, changeData } = useAttendance();
+  const { attendances, changeData, removeAttendance } = useAttendance();
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -51,6 +52,13 @@ const Attendances: React.FC = () => {
     [changeData],
   );
 
+  const handleDeleteAttendance = useCallback(
+    (id: string) => {
+      removeAttendance(id);
+    },
+    [removeAttendance],
+  );
+
   return (
     <Container>
       <Apresentation>
@@ -72,35 +80,39 @@ const Attendances: React.FC = () => {
           />
         )}
       </Apresentation>
-      <AppointmentsContainer>
-        {attendances.map(attendance => (
-          <AttendanceContainer key={attendance.id}>
-            <Icon
-              name="clock"
-              size={20}
-              color="#E2887F"
-              style={{ marginRight: 8 }}
-            />
-            <HourAttendanceContainer>
-              <StartHourAttendance>
-                {format(parseJSON(attendance.start_hour), "HH':'mm")}
-              </StartHourAttendance>
-              <EndHourAttendance>
-                {format(parseJSON(attendance.end_hour), "HH':'mm")}
-              </EndHourAttendance>
-            </HourAttendanceContainer>
-            <PacientBox>
-              <PacientContainer>
-                <NameText>{attendance.pacient.name}</NameText>
-                <BaseButton>
-                  <Icon name="trash-2" size={20} color="#C74646" />
-                </BaseButton>
-              </PacientContainer>
-              <DetailsText>{attendance.treatment}</DetailsText>
-            </PacientBox>
-          </AttendanceContainer>
-        ))}
-      </AppointmentsContainer>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <AppointmentsContainer>
+          {attendances.map(attendance => (
+            <AttendanceContainer key={attendance.id}>
+              <Icon
+                name="clock"
+                size={20}
+                color="#E2887F"
+                style={{ marginRight: 8 }}
+              />
+              <HourAttendanceContainer>
+                <StartHourAttendance>
+                  {format(parseJSON(attendance.start_hour), "HH':'mm")}
+                </StartHourAttendance>
+                <EndHourAttendance>
+                  {format(parseJSON(attendance.end_hour), "HH':'mm")}
+                </EndHourAttendance>
+              </HourAttendanceContainer>
+              <PacientBox>
+                <PacientContainer>
+                  <NameText>{attendance.pacient.name}</NameText>
+                  <BaseButton
+                    onPress={() => handleDeleteAttendance(attendance.id)}
+                  >
+                    <Icon name="trash-2" size={20} color="#C74646" />
+                  </BaseButton>
+                </PacientContainer>
+                <DetailsText>{attendance.treatment}</DetailsText>
+              </PacientBox>
+            </AttendanceContainer>
+          ))}
+        </AppointmentsContainer>
+      </ScrollView>
       <AddButton
         onPress={() => {
           navigation.navigate('RegisterAttendance');
