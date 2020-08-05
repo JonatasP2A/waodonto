@@ -1,12 +1,15 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BaseButton } from 'react-native-gesture-handler';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import {
   Container,
@@ -69,58 +72,140 @@ const RegisterPayment: React.FC = () => {
 
   const handleCashPayment = useCallback(
     async (data: FormDataPacient) => {
-      const date = data.payment_day.split('/');
+      try {
+        if (pacientSelected) {
+          formRef.current?.setErrors({});
 
-      if (pacientSelected) {
-        await api.post('/payments/cash-debit', {
-          pacient_id: pacientSelected.id,
-          form_payment: payments_form[paymentForm % 5],
-          amount: data.amount,
-          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
-        });
+          const schema = Yup.object().shape({
+            amount: Yup.number(),
+            payment_day: Yup.string().required().length(10),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          const date = data.payment_day.split('/');
+
+          await api.post('/payments/cash-debit', {
+            pacient_id: pacientSelected.id,
+            form_payment: payments_form[paymentForm % 5],
+            amount: data.amount,
+            payment_day: `${date[2]}-${date[1]}-${date[0]}`,
+          });
+        }
+
+        goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro ao cadastrar pagamento',
+          'Ocorreu um erro ao cadastrar pagamento, cheque os campos preenchidos.',
+        );
       }
-
-      goBack();
     },
     [pacientSelected, paymentForm, payments_form, goBack],
   );
 
   const handleChequePayment = useCallback(
     async (data: FormDataPacient) => {
-      const date = data.payment_day.split('/');
+      try {
+        if (pacientSelected) {
+          formRef.current?.setErrors({});
 
-      if (pacientSelected) {
-        await api.post('/payments/cheque', {
-          pacient_id: pacientSelected.id,
-          form_payment: payments_form[paymentForm % 5],
-          amount: data.amount,
-          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
-          agency: data.agency,
-          account: data.account,
-          name_cheque: data.name_cheque,
-        });
+          const schema = Yup.object().shape({
+            amount: Yup.number(),
+            payment_day: Yup.string().required().length(10),
+            agency: Yup.number().required(),
+            account: Yup.number().required(),
+            name_cheque: Yup.string().required(),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          const date = data.payment_day.split('/');
+
+          await api.post('/payments/cheque', {
+            pacient_id: pacientSelected.id,
+            form_payment: payments_form[paymentForm % 5],
+            amount: data.amount,
+            payment_day: `${date[2]}-${date[1]}-${date[0]}`,
+            agency: data.agency,
+            account: data.account,
+            name_cheque: data.name_cheque,
+          });
+        }
+
+        goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro ao cadastrar pagamento',
+          'Ocorreu um erro ao cadastrar pagamento, cheque os campos preenchidos.',
+        );
       }
-
-      goBack();
     },
     [pacientSelected, paymentForm, payments_form, goBack],
   );
 
   const handleCreditPayment = useCallback(
     async (data: FormDataPacient) => {
-      const date = data.payment_day.split('/');
+      try {
+        if (pacientSelected) {
+          formRef.current?.setErrors({});
 
-      if (pacientSelected) {
-        await api.post('/payments/credit', {
-          pacient_id: pacientSelected.id,
-          form_payment: payments_form[paymentForm % 5],
-          amount: data.amount,
-          payment_day: `${date[2]}-${date[1]}-${date[0]}`,
-          quota: data.quota,
-        });
+          const schema = Yup.object().shape({
+            amount: Yup.number(),
+            payment_day: Yup.string().required().length(10),
+            quota: Yup.number().required(),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          const date = data.payment_day.split('/');
+
+          await api.post('/payments/credit', {
+            pacient_id: pacientSelected.id,
+            form_payment: payments_form[paymentForm % 5],
+            amount: data.amount,
+            payment_day: `${date[2]}-${date[1]}-${date[0]}`,
+            quota: data.quota,
+          });
+        }
+
+        goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro ao cadastrar pagamento',
+          'Ocorreu um erro ao cadastrar pagamento, cheque os campos preenchidos.',
+        );
       }
-
-      goBack();
     },
     [pacientSelected, paymentForm, payments_form, goBack],
   );

@@ -1,10 +1,14 @@
 import React, { useCallback, useRef } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import { Container } from './styles';
 import { usePacient } from '../../hooks/pacients';
@@ -26,9 +30,40 @@ const PacientsEdit: React.FC = () => {
 
   const handleEdit = useCallback(
     async (data: FormDataPacient) => {
-      addPacient(data);
+      try {
+        formRef.current?.setErrors({});
 
-      goBack();
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          phone: Yup.string().min(10).max(14),
+          cpf: Yup.string().min(11).max(14),
+          address: Yup.string(),
+          job: Yup.string(),
+          birthday: Yup.string(),
+          instagram: Yup.string(),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        addPacient(data);
+
+        goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro ao cadastrar paciente',
+          'Ocorreu um erro ao cadastrar paciente, cheque os campos preenchidos.',
+        );
+      }
     },
     [goBack, addPacient],
   );

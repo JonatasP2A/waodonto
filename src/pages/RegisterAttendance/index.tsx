@@ -1,11 +1,14 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import { usePacient } from '../../hooks/pacients';
 import { useAttendance } from '../../hooks/attendances';
@@ -47,18 +50,46 @@ const RegisterAttendances: React.FC = () => {
 
   const handleAttendance = useCallback(
     async (data: FormDataPacient) => {
-      if (pacientSelected) {
-        const date = data.attendance_day.split('/');
+      try {
+        if (pacientSelected) {
+          formRef.current?.setErrors({});
 
-        addAttendance({
-          pacient_id: pacientSelected.id,
-          start_hour: `${date[2]}-${date[1]}-${date[0]} ${data.start_hour}:00`,
-          end_hour: `${date[2]}-${date[1]}-${date[0]} ${data.end_hour}:00`,
-          treatment: data.treatment,
-        });
+          const schema = Yup.object().shape({
+            attendance_day: Yup.string().required().length(10),
+            start_hour: Yup.string().required().length(5),
+            end_hour: Yup.string().required().length(5),
+            treatment: Yup.string().required(),
+          });
+
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+
+          const date = data.attendance_day.split('/');
+
+          addAttendance({
+            pacient_id: pacientSelected.id,
+            start_hour: `${date[2]}-${date[1]}-${date[0]} ${data.start_hour}:00`,
+            end_hour: `${date[2]}-${date[1]}-${date[0]} ${data.end_hour}:00`,
+            treatment: data.treatment,
+          });
+        }
+
+        goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        Alert.alert(
+          'Erro ao cadastrar atendimento',
+          'Ocorreu um erro ao cadastrar atendimento, cheque os campos preenchidos.',
+        );
       }
-
-      goBack();
     },
     [pacientSelected, goBack, addAttendance],
   );
