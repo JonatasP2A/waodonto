@@ -23,8 +23,8 @@ import {
   AgContainer,
 } from './styles';
 
-import api from '../../services/api';
 import { usePacient } from '../../hooks/pacients';
+import { usePayment } from '../../hooks/payments';
 
 interface Pacient {
   id: string;
@@ -47,6 +47,11 @@ const RegisterPayment: React.FC = () => {
   const [paymentForm, setPaymentForm] = useState<number>(0);
   const [pacientSelected, setPacientSelected] = useState<Pacient>();
   const { pacients } = usePacient();
+  const {
+    addCashOrDebitPayment,
+    addChequePayment,
+    addCreditPayment,
+  } = usePayment();
 
   const { goBack } = useNavigation();
 
@@ -87,7 +92,7 @@ const RegisterPayment: React.FC = () => {
 
           const date = data.payment_day.split('/');
 
-          await api.post('/payments/cash-debit', {
+          addCashOrDebitPayment({
             pacient_id: pacientSelected.id,
             form_payment: payments_form[paymentForm % 5],
             amount: data.amount,
@@ -111,7 +116,13 @@ const RegisterPayment: React.FC = () => {
         );
       }
     },
-    [pacientSelected, paymentForm, payments_form, goBack],
+    [
+      pacientSelected,
+      paymentForm,
+      payments_form,
+      addCashOrDebitPayment,
+      goBack,
+    ],
   );
 
   const handleChequePayment = useCallback(
@@ -134,7 +145,7 @@ const RegisterPayment: React.FC = () => {
 
           const date = data.payment_day.split('/');
 
-          await api.post('/payments/cheque', {
+          addChequePayment({
             pacient_id: pacientSelected.id,
             form_payment: payments_form[paymentForm % 5],
             amount: data.amount,
@@ -161,7 +172,7 @@ const RegisterPayment: React.FC = () => {
         );
       }
     },
-    [pacientSelected, paymentForm, payments_form, goBack],
+    [pacientSelected, paymentForm, payments_form, addChequePayment, goBack],
   );
 
   const handleCreditPayment = useCallback(
@@ -182,7 +193,7 @@ const RegisterPayment: React.FC = () => {
 
           const date = data.payment_day.split('/');
 
-          await api.post('/payments/credit', {
+          addCreditPayment({
             pacient_id: pacientSelected.id,
             form_payment: payments_form[paymentForm % 5],
             amount: data.amount,
@@ -207,7 +218,7 @@ const RegisterPayment: React.FC = () => {
         );
       }
     },
-    [pacientSelected, paymentForm, payments_form, goBack],
+    [pacientSelected, paymentForm, payments_form, addCreditPayment, goBack],
   );
 
   return (

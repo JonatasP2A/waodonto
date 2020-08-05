@@ -3,12 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { PacientProvider } from './pacients';
 import { AttendanceProvider } from './attendances';
+import { PaymentProvider } from './payments';
 
 const AppProvider: React.FC = ({ children }) => {
   return (
     <PacientProvider>
       <AttendanceProvider>
-        <NavigationContainer>{children}</NavigationContainer>
+        <PaymentProvider>
+          <NavigationContainer>{children}</NavigationContainer>
+        </PaymentProvider>
       </AttendanceProvider>
     </PacientProvider>
   );

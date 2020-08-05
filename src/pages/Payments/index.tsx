@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { BorderlessButton } from 'react-native-gesture-handler';
-import { getMonth, getYear, format } from 'date-fns';
+import { getMonth, format } from 'date-fns';
 
 import {
   Container,
@@ -20,9 +20,9 @@ import {
   AddButton,
   AddIcon,
 } from './styles';
-import formatValue from '../../utils/formatValue';
 
-import api from '../../services/api';
+import { usePayment } from '../../hooks/payments';
+import formatValue from '../../utils/formatValue';
 
 interface Payments {
   id: string;
@@ -38,9 +38,13 @@ interface Payments {
 }
 
 const Payments: React.FC = () => {
-  const [month, setMonth] = useState(getMonth(new Date()) + 1);
-  const [year, setYear] = useState(getYear(new Date()));
-  const [payments, setPayments] = useState<Payments[]>([]);
+  const {
+    incrementMonth,
+    decrementMonth,
+    removePayment,
+    payments,
+    month,
+  } = usePayment();
 
   const navigation = useNavigation();
 
@@ -60,37 +64,12 @@ const Payments: React.FC = () => {
   ];
 
   function handleDecrementMonth(): void {
-    if (month === 1) {
-      setYear(year - 1);
-      setMonth(12);
-    } else {
-      setMonth(month - 1);
-    }
+    decrementMonth();
   }
 
   function handleIncrementMonth(): void {
-    if (month === 12) {
-      setYear(year + 1);
-      setMonth(1);
-    } else {
-      setMonth(month + 1);
-    }
+    incrementMonth();
   }
-
-  useEffect(() => {
-    async function loadPayments(): Promise<void> {
-      const response = await api.get('/payments', {
-        params: {
-          month,
-          year,
-        },
-      });
-
-      setPayments(response.data);
-    }
-
-    loadPayments();
-  }, [month, year]);
 
   const balanceTotal = useMemo(() => {
     const total = payments.reduce((accumulator, payment) => {
@@ -126,7 +105,12 @@ const Payments: React.FC = () => {
         <DetailsContainer>
           {payments.map(payment => (
             <PacientContainer key={payment.id}>
-              <PacientNameText>{payment.pacient.name}</PacientNameText>
+              <Row>
+                <PacientNameText>{payment.pacient.name}</PacientNameText>
+                <BorderlessButton onPress={() => removePayment(payment.id)}>
+                  <Icon name="trash-2" size={20} />
+                </BorderlessButton>
+              </Row>
               <Row>
                 <PacientText>
                   {formatValue(Number(payment.amount))} | {payment.form_payment}
