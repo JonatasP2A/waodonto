@@ -63,13 +63,13 @@ export const Icon = styled(FeatherIcon)`
 
 export const PacientPhone = styled.Text`
   font-family: 'Poppins-Regular';
-  font-size: 14px;
+  font-size: 12px;
   color: #000;
 `;
 
 export const PacientCPF = styled.Text`
   font-family: 'Poppins-Regular';
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 8px;
   color: #000;
 `;

@@ -103,8 +103,16 @@ const Payments: React.FC = () => {
       </BalanceContainer>
       <ScrollView showsVerticalScrollIndicator={false}>
         <DetailsContainer>
-          {payments.map(payment => (
-            <PacientContainer key={payment.id}>
+          {payments.map((payment, i) => (
+            <PacientContainer
+              key={payment.id}
+              style={
+                i === payments.length - 1 && {
+                  borderBottomWidth: 0,
+                  paddingBottom: 0,
+                }
+              }
+            >
               <Row>
                 <PacientNameText>{payment.pacient.name}</PacientNameText>
                 <BorderlessButton onPress={() => removePayment(payment.id)}>

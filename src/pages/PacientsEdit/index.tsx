@@ -56,12 +56,12 @@ const PacientsEdit: React.FC = () => {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Nome obrigatório'),
-          phone: Yup.string().min(10).max(14),
-          cpf: Yup.string().min(11).max(14),
-          address: Yup.string(),
-          job: Yup.string(),
-          birthday: Yup.string(),
-          instagram: Yup.string(),
+          phone: Yup.string().min(10).max(14).nullable(),
+          cpf: Yup.string().min(11).max(14).nullable(),
+          address: Yup.string().nullable(),
+          job: Yup.string().nullable(),
+          birthday: Yup.string().nullable(),
+          instagram: Yup.string().nullable(),
         });
 
         await schema.validate(data, {

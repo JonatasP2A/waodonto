@@ -13,7 +13,7 @@ const AttendancesStackScreen: React.FC = () => (
       component={Attendance}
       options={() => ({
         headerTitle: '',
-        headerStyle: { backgroundColor: '#273554' },
+        headerStyle: { backgroundColor: '#273554', elevation: 0 },
       })}
     />
     <App.Screen
