@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
@@ -60,15 +60,22 @@ const AttendanceProvider: React.FC = ({ children }) => {
       const response = await api.post('/attendances', data);
       const userName = await api.get(`/pacients/${response.data.pacient_id}`);
 
-      setAttendances([
-        ...attendances,
-        { ...response.data, pacient: { name: userName.data.name } },
-      ]);
-
-      await AsyncStorage.setItem(
-        '@WaOdonto:attendances',
-        JSON.stringify(attendances),
+      const actualDay = isSameDay(
+        new Date(),
+        new Date(response.data.start_hour),
       );
+
+      if (actualDay) {
+        setAttendances([
+          ...attendances,
+          { ...response.data, pacient: { name: userName.data.name } },
+        ]);
+
+        await AsyncStorage.setItem(
+          '@WaOdonto:attendances',
+          JSON.stringify(attendances),
+        );
+      }
     },
     [attendances],
   );

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { Alert } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
@@ -69,25 +69,31 @@ const PacientsEdit: React.FC = () => {
   );
 
   return (
-    <Container>
-      <Form ref={formRef} onSubmit={handleEdit}>
-        <Input name="name" icon="user" placeholder="Nome" />
-        <Input name="phone" icon="smartphone" placeholder="Celular" />
-        <Input name="cpf" icon="user-plus" placeholder="CPF" />
-        <Input name="address" icon="home" placeholder="Endereço" />
-        <Input name="job" icon="briefcase" placeholder="Trabalho" />
-        <Input name="instagram" icon="instagram" placeholder="Instagram" />
-        <Input name="birthday" icon="gift" placeholder="Aniversário" />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Container showsVerticalScrollIndicator={false}>
+        <Form ref={formRef} onSubmit={handleEdit}>
+          <Input name="name" icon="user" placeholder="Nome" />
+          <Input name="phone" icon="smartphone" placeholder="Celular" />
+          <Input name="cpf" icon="user-plus" placeholder="CPF" />
+          <Input name="address" icon="home" placeholder="Endereço" />
+          <Input name="job" icon="briefcase" placeholder="Trabalho" />
+          <Input name="instagram" icon="instagram" placeholder="Instagram" />
+          <Input name="birthday" icon="gift" placeholder="Aniversário" />
 
-        <Button
-          onPress={() => {
-            formRef.current?.submitForm();
-          }}
-        >
-          Cadastrar
-        </Button>
-      </Form>
-    </Container>
+          <Button
+            onPress={() => {
+              formRef.current?.submitForm();
+            }}
+          >
+            Cadastrar
+          </Button>
+        </Form>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 

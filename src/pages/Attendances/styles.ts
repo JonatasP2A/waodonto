@@ -47,7 +47,6 @@ export const AttendanceContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 8px;
-  /* max-width: 235px; */
 `;
 
 export const HourAttendanceContainer = styled.View`
@@ -58,7 +57,6 @@ export const StartHourAttendance = styled.Text`
   font-family: 'Poppins-Regular';
   font-size: 14px;
   color: #000;
-  width: 40px;
 `;
 
 export const EndHourAttendance = styled.Text`

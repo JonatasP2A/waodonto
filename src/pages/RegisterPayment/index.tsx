@@ -1,5 +1,12 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Dimensions, View, Alert } from 'react-native';
+import {
+  Dimensions,
+  View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { BaseButton } from 'react-native-gesture-handler';
 import { Form } from '@unform/mobile';
@@ -222,123 +229,131 @@ const RegisterPayment: React.FC = () => {
   );
 
   return (
-    <Container>
-      <PacientsScroll horizontal showsHorizontalScrollIndicator={false}>
-        {pacients.map(pacient => (
-          <PacientContainer
-            key={pacient.id}
-            onPress={() => handleFocused(pacient.id)}
-          >
-            <PacientNameText>{pacient.name}</PacientNameText>
-          </PacientContainer>
-        ))}
-      </PacientsScroll>
-      {pacientSelected ? <Text>{pacientSelected.name}</Text> : <View />}
-      <PaymentFormContainer>
-        <BaseButton onPress={() => handleDecrementPaymentForm()}>
-          <Icon name="chevron-left" size={24} />
-        </BaseButton>
-        <PaymentFormText>{payments_form[paymentForm % 5]}</PaymentFormText>
-        <BaseButton onPress={() => handleIncrementPaymentForm()}>
-          <Icon name="chevron-right" size={24} />
-        </BaseButton>
-      </PaymentFormContainer>
-      {paymentForm % 5 === 0 && <View />}
-      {paymentForm % 5 === 1 && (
-        <Form ref={formRef} onSubmit={handleCashPayment}>
-          <Input name="amount" placeholder="Valor" keyboardType="numeric" />
-          <Input
-            name="payment_day"
-            placeholder="Dia do pagamento"
-            keyboardType="numbers-and-punctuation"
-          />
-          <Button
-            onPress={() => {
-              formRef.current?.submitForm();
-            }}
-          >
-            Salvar
-          </Button>
-        </Form>
-      )}
-      {paymentForm % 5 === 2 && (
-        <Form ref={formRef} onSubmit={handleChequePayment}>
-          <Input name="amount" placeholder="Valor" keyboardType="numeric" />
-          <Input
-            name="payment_day"
-            placeholder="Dia do pagamento"
-            keyboardType="numeric"
-          />
-          <AgContainer>
-            <Input
-              name="agency"
-              placeholder="Ag."
-              keyboardType="numeric"
-              containerStyle={{
-                width: Dimensions.get('window').width / 2 - 24,
-              }}
-            />
-            <Input
-              name="account"
-              placeholder="Conta"
-              keyboardType="numeric"
-              containerStyle={{
-                width: Dimensions.get('window').width / 2 - 24,
-              }}
-            />
-          </AgContainer>
-          <Input name="name_cheque" placeholder="Nome titular do cheque" />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Container>
+        <PacientsScroll horizontal showsHorizontalScrollIndicator={false}>
+          {pacients.map(pacient => (
+            <PacientContainer
+              key={pacient.id}
+              onPress={() => handleFocused(pacient.id)}
+            >
+              <PacientNameText>{pacient.name}</PacientNameText>
+            </PacientContainer>
+          ))}
+        </PacientsScroll>
+        {pacientSelected ? <Text>{pacientSelected.name}</Text> : <View />}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <PaymentFormContainer>
+            <BaseButton onPress={() => handleDecrementPaymentForm()}>
+              <Icon name="chevron-left" size={24} />
+            </BaseButton>
+            <PaymentFormText>{payments_form[paymentForm % 5]}</PaymentFormText>
+            <BaseButton onPress={() => handleIncrementPaymentForm()}>
+              <Icon name="chevron-right" size={24} />
+            </BaseButton>
+          </PaymentFormContainer>
+          {paymentForm % 5 === 0 && <View />}
+          {paymentForm % 5 === 1 && (
+            <Form ref={formRef} onSubmit={handleCashPayment}>
+              <Input name="amount" placeholder="Valor" keyboardType="numeric" />
+              <Input
+                name="payment_day"
+                placeholder="Dia do pagamento"
+                keyboardType="numbers-and-punctuation"
+              />
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Salvar
+              </Button>
+            </Form>
+          )}
+          {paymentForm % 5 === 2 && (
+            <Form ref={formRef} onSubmit={handleChequePayment}>
+              <Input name="amount" placeholder="Valor" keyboardType="numeric" />
+              <Input
+                name="payment_day"
+                placeholder="Dia do pagamento"
+                keyboardType="numeric"
+              />
+              <AgContainer>
+                <Input
+                  name="agency"
+                  placeholder="Ag."
+                  keyboardType="numeric"
+                  containerStyle={{
+                    width: Dimensions.get('window').width / 2 - 24,
+                  }}
+                />
+                <Input
+                  name="account"
+                  placeholder="Conta"
+                  keyboardType="numeric"
+                  containerStyle={{
+                    width: Dimensions.get('window').width / 2 - 24,
+                  }}
+                />
+              </AgContainer>
+              <Input name="name_cheque" placeholder="Nome titular do cheque" />
 
-          <Button
-            onPress={() => {
-              formRef.current?.submitForm();
-            }}
-          >
-            Salvar
-          </Button>
-        </Form>
-      )}
-      {paymentForm % 5 === 3 && (
-        <Form ref={formRef} onSubmit={handleCashPayment}>
-          <Input name="amount" placeholder="Valor" keyboardType="numeric" />
-          <Input
-            name="payment_day"
-            placeholder="Dia do pagamento"
-            keyboardType="numeric"
-          />
-          <Button
-            onPress={() => {
-              formRef.current?.submitForm();
-            }}
-          >
-            Salvar
-          </Button>
-        </Form>
-      )}
-      {paymentForm % 5 === 4 && (
-        <Form ref={formRef} onSubmit={handleCreditPayment}>
-          <Input name="amount" placeholder="Valor" keyboardType="numeric" />
-          <Input
-            name="payment_day"
-            placeholder="Dia do pagamento"
-            keyboardType="numeric"
-          />
-          <Input
-            name="quota"
-            placeholder="Nº parcelas"
-            keyboardType="numeric"
-          />
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Salvar
+              </Button>
+            </Form>
+          )}
+          {paymentForm % 5 === 3 && (
+            <Form ref={formRef} onSubmit={handleCashPayment}>
+              <Input name="amount" placeholder="Valor" keyboardType="numeric" />
+              <Input
+                name="payment_day"
+                placeholder="Dia do pagamento"
+                keyboardType="numeric"
+              />
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Salvar
+              </Button>
+            </Form>
+          )}
+          {paymentForm % 5 === 4 && (
+            <Form ref={formRef} onSubmit={handleCreditPayment}>
+              <Input name="amount" placeholder="Valor" keyboardType="numeric" />
+              <Input
+                name="payment_day"
+                placeholder="Dia do pagamento"
+                keyboardType="numeric"
+              />
+              <Input
+                name="quota"
+                placeholder="Nº parcelas"
+                keyboardType="numeric"
+              />
 
-          <Button
-            onPress={() => {
-              formRef.current?.submitForm();
-            }}
-          >
-            Salvar
-          </Button>
-        </Form>
-      )}
-    </Container>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Salvar
+              </Button>
+            </Form>
+          )}
+        </ScrollView>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 

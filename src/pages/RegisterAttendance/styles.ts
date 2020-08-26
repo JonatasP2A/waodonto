@@ -7,7 +7,8 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const PacientsScroll = styled.ScrollView`
-  max-height: 72px;
+  flex: 1;
+  max-height: 60px;
 `;
 
 export const PacientContainer = styled(RectButton)`
@@ -17,7 +18,7 @@ export const PacientContainer = styled(RectButton)`
   border-radius: 10px;
   justify-content: center;
   align-items: center;
-  padding: 0 8px;
+  padding: 8px;
   margin-right: 16px;
   margin-bottom: 16px;
 `;

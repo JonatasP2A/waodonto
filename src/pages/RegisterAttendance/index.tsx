@@ -1,5 +1,11 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Dimensions, Alert } from 'react-native';
+import {
+  Dimensions,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
@@ -95,57 +101,65 @@ const RegisterAttendances: React.FC = () => {
   );
 
   return (
-    <Container>
-      <PacientsScroll horizontal showsHorizontalScrollIndicator={false}>
-        {pacients.map(pacient => (
-          <PacientContainer
-            key={pacient.id}
-            onPress={() => handleFocused(pacient.id)}
-          >
-            <PacientNameText>{pacient.name}</PacientNameText>
-          </PacientContainer>
-        ))}
-      </PacientsScroll>
-      {pacientSelected ? (
-        <Text>{pacientSelected.name}</Text>
-      ) : (
-        <Text>Selecione um paciente acima</Text>
-      )}
-      <Form ref={formRef} onSubmit={handleAttendance}>
-        <Input
-          name="attendance_day"
-          icon="calendar"
-          placeholder="Data da consulta"
-        />
-        <HourContainer>
-          <Input
-            name="start_hour"
-            placeholder="Hora inicial"
-            icon="clock"
-            containerStyle={{
-              width: Dimensions.get('window').width / 2 - 24,
-            }}
-          />
-          <Input
-            name="end_hour"
-            placeholder="Hora final"
-            icon="clock"
-            containerStyle={{
-              width: Dimensions.get('window').width / 2 - 24,
-            }}
-          />
-        </HourContainer>
-        <Input name="treatment" placeholder="Tratamento" icon="smile" />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <ScrollView>
+        <Container>
+          <PacientsScroll horizontal showsHorizontalScrollIndicator={false}>
+            {pacients.map(pacient => (
+              <PacientContainer
+                key={pacient.id}
+                onPress={() => handleFocused(pacient.id)}
+              >
+                <PacientNameText>{pacient.name}</PacientNameText>
+              </PacientContainer>
+            ))}
+          </PacientsScroll>
+          {pacientSelected ? (
+            <Text>{pacientSelected.name}</Text>
+          ) : (
+            <Text>Selecione um paciente acima</Text>
+          )}
+          <Form ref={formRef} onSubmit={handleAttendance}>
+            <Input
+              name="attendance_day"
+              icon="calendar"
+              placeholder="Data da consulta"
+            />
+            <HourContainer>
+              <Input
+                name="start_hour"
+                placeholder="Hora inicial"
+                icon="clock"
+                containerStyle={{
+                  width: Dimensions.get('window').width / 2 - 24,
+                }}
+              />
+              <Input
+                name="end_hour"
+                placeholder="Hora final"
+                icon="clock"
+                containerStyle={{
+                  width: Dimensions.get('window').width / 2 - 24,
+                }}
+              />
+            </HourContainer>
+            <Input name="treatment" placeholder="Tratamento" icon="smile" />
 
-        <Button
-          onPress={() => {
-            formRef.current?.submitForm();
-          }}
-        >
-          Agendar
-        </Button>
-      </Form>
-    </Container>
+            <Button
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
+              Agendar
+            </Button>
+          </Form>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

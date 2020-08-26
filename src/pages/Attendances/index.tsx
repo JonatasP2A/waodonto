@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 import { BaseButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { format, parseJSON } from 'date-fns';
+import { format, parseJSON, isSameDay, getDate, getMonth } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useAttendance } from '../../hooks/attendances';
@@ -64,7 +64,13 @@ const Attendances: React.FC = () => {
       <Apresentation>
         <ApresentationTextContainer>
           <ApresentationText>Olá Wander,</ApresentationText>
-          <ApresentationText>pacientes de hoje:</ApresentationText>
+          <ApresentationText>
+            {isSameDay(new Date(), selectedDate)
+              ? 'pacientes de hoje:'
+              : `pacientes do dia ${getDate(selectedDate)}/${getMonth(
+                  selectedDate,
+                )} :`}
+          </ApresentationText>
         </ApresentationTextContainer>
         <BaseButton onPress={handleToggleDatePicker}>
           <Icon name="calendar" size={24} color="#fff" />
