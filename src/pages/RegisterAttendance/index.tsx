@@ -72,11 +72,13 @@ const RegisterAttendances: React.FC = () => {
           });
 
           const date = data.attendance_day.split('/');
+          const hour = data.start_hour.split(':');
+          const hour2 = data.end_hour.split(':');
 
           addAttendance({
             pacient_id: pacientSelected.id,
-            start_hour: `${date[2]}-${date[1]}-${date[0]} ${data.start_hour}:00`,
-            end_hour: `${date[2]}-${date[1]}-${date[0]} ${data.end_hour}:00`,
+            start_hour: `${date[2]}-${date[1]}-${date[0]} ${Number(hour[0]) - 3}:${hour[1]}:00`,
+            end_hour: `${date[2]}-${date[1]}-${date[0]} ${Number(hour2[0]) - 3}:${hour2[1]}:00`,
             treatment: data.treatment,
           });
         }
